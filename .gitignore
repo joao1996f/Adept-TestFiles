@@ -1,2 +1,3 @@
-mult.s
-mult.bin
+bin/*
+elf/*
+hex/*

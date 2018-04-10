@@ -1,39 +1,39 @@
 # RISCV environment variable must be set
-
 CC=$(RISCV)/bin/riscv32-unknown-elf-gcc
 OBJCOPY=$(RISCV)/bin/riscv32-unknown-elf-objcopy
 CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -nostartfiles -fno-common
-LFLAGS= -static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
-PROG?=
+LFLAGS=-static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
 
-assem := $(PROG).s
-$(assem): $(PROG).c
-	$(CC) $< -S $(CFLAGS) $(LFLAGS)
+SRCS=$(wildcard simple/*.c)
+HEXS=$(SRCS:%.c=hex/%.hex)
+ELFS=$(SRCS:%.c=elf/%.elf)
+BINS=$(SRCS:%.c=bin/%.bin)
 
-.PHONY: assem
-assem: $(assem)
+.PHONY: all
+all: directories hex
 
-elf := $(PROG).elf
-$(elf): $(PROG).c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $(PROG).c
+.PHONY: directories
+directories:
+	mkdir -p elf/simple bin/simple hex/simple
+
+$(ELFS): elf/%.elf: %.c
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
 
 .PHONY: elf
-elf: $(elf)
+elf: $(ELFS)
 
-bin := $(PROG).bin
-$(bin): $(elf)
+$(BINS): bin/%.bin: elf/%.elf
 	$(OBJCOPY) -O binary $< $@
 
 .PHONY: bin
-bin: $(bin)
+bin: $(BINS)
 
-hex := $(PROG).hex
-$(hex): $(bin)
+$(HEXS): hex/%.hex: bin/%.bin
 	od -t x4 -An -w4 -v $< > $@
 
 .PHONY: hex
-hex: $(hex)
+hex: $(HEXS)
 
 .PHONY: clean
 clean:
-	rm -rf $(hex) $(elf) $(assem) $(bin)
+	rm -rf $(HEXS) $(ELFS) $(BINS)

@@ -13,6 +13,7 @@ LDFLAGS=-T $(LINKER_SCRIPT) -nostartfiles -static -L$(RISCV)/lib/gcc/riscv32-unk
 # Generate sources and outputs lists
 ASM_SRC=$(BSP_PATH)/entry.S
 SRCS=$(wildcard simple/*.c)
+SRCS+=$(wildcard intermediate/*.c)
 HEXS=$(SRCS:%.c=hex/%.hex)
 ELFS=$(SRCS:%.c=elf/%.elf)
 BINS=$(SRCS:%.c=bin/%.bin)
@@ -26,6 +27,7 @@ all: directories hex
 .PHONY: directories
 directories:
 	mkdir -p elf/simple bin/simple hex/simple
+	mkdir -p elf/intermediate bin/intermediate hex/intermediate
 
 $(ELFS): elf/%.elf: %.c $(LINK_OBJS) $(LINKER_SCRIPT)
 	$(CC) $(CFLAGS) $(LINK_OBJS) -o $@ $< $(LDFLAGS)

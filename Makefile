@@ -2,8 +2,11 @@
 CC=$(RISCV)/bin/riscv32-unknown-elf-gcc
 OBJCOPY=$(RISCV)/bin/riscv32-unknown-elf-objcopy
 CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -fno-common
+
+# Set board support package path
 BSP_PATH=bsp
 
+# Linker Script Flags
 LINKER_SCRIPT=$(BSP_PATH)/Adept.lds
 LDFLAGS=-T $(LINKER_SCRIPT) -nostartfiles -static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
 

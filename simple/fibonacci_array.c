@@ -1,4 +1,4 @@
-void main(void) {
+int main(void) {
   int Fib[20];
 
   Fib[0] = 0;
@@ -8,5 +8,5 @@ void main(void) {
     Fib[i] = Fib[i - 2] + Fib[i - 1];
   }
 
-  register int a = Fib[19];
+  return Fib[19];
 }

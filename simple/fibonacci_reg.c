@@ -1,5 +1,5 @@
 // Fibonacci sequence using registers
-void main(void) {
+int main(void) {
   register int a = 0;
   register int b = 1;
   register int c;
@@ -10,4 +10,5 @@ void main(void) {
     b = c;
   }
 
+  return c;
 }

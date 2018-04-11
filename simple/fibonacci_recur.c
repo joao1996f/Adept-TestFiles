@@ -4,7 +4,6 @@ int fibonacci(int a, int b, int max) {
   return fibonacci(b, a + b, max - 1);
 }
 
-void main(void) {
-  int fib;
-  fib = fibonacci(0, 1, 17);
+int main(void) {
+  return fibonacci(0, 1, 17);
 }

@@ -1,13 +1,20 @@
 # RISCV environment variable must be set
 CC=$(RISCV)/bin/riscv32-unknown-elf-gcc
 OBJCOPY=$(RISCV)/bin/riscv32-unknown-elf-objcopy
-CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -nostartfiles -fno-common
-LFLAGS=-static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
+CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -fno-common
 
+LINKER_SCRIPT=Adept.lds
+LDFLAGS=-T $(LINKER_SCRIPT) -nostartfiles -static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
+
+# Generate sources and outputs lists
+ASM_SRC=entry.S
 SRCS=$(wildcard simple/*.c)
 HEXS=$(SRCS:%.c=hex/%.hex)
 ELFS=$(SRCS:%.c=elf/%.elf)
 BINS=$(SRCS:%.c=bin/%.bin)
+ASM_OBJS=$(ASM_SRC:%.S=%.o)
+
+LINK_OBJS=$(ASM_OBJS)
 
 .PHONY: all
 all: directories hex
@@ -16,8 +23,14 @@ all: directories hex
 directories:
 	mkdir -p elf/simple bin/simple hex/simple
 
-$(ELFS): elf/%.elf: %.c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
+$(ELFS): elf/%.elf: %.c $(LINK_OBJS) $(LINKER_SCRIPT)
+	$(CC) $(CFLAGS) $(LINK_OBJS) -o $@ $< $(LDFLAGS)
+
+.PHONY: asm_obj
+asm_obj: $(ASM_OBJS)
+
+$(ASM_OBJS): %.o: %.S
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 .PHONY: elf
 elf: $(ELFS)

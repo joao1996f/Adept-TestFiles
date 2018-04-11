@@ -2,12 +2,13 @@
 CC=$(RISCV)/bin/riscv32-unknown-elf-gcc
 OBJCOPY=$(RISCV)/bin/riscv32-unknown-elf-objcopy
 CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -fno-common
+BSP_PATH=bsp
 
-LINKER_SCRIPT=Adept.lds
+LINKER_SCRIPT=$(BSP_PATH)/Adept.lds
 LDFLAGS=-T $(LINKER_SCRIPT) -nostartfiles -static -L$(RISCV)/lib/gcc/riscv32-unknown-elf/7.2.0/ -lgcc
 
 # Generate sources and outputs lists
-ASM_SRC=entry.S
+ASM_SRC=$(BSP_PATH)/entry.S
 SRCS=$(wildcard simple/*.c)
 HEXS=$(SRCS:%.c=hex/%.hex)
 ELFS=$(SRCS:%.c=elf/%.elf)
@@ -49,4 +50,4 @@ hex: $(HEXS)
 
 .PHONY: clean
 clean:
-	rm -rf $(HEXS) $(ELFS) $(BINS)
+	rm -rf $(HEXS) $(ELFS) $(BINS) $(ASM_OBJS)

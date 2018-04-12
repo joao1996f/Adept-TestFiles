@@ -22,7 +22,7 @@ ASM_OBJS=$(ASM_SRC:%.S=%.o)
 LINK_OBJS=$(ASM_OBJS)
 
 .PHONY: all
-all: directories hex
+all: directories elf
 
 .PHONY: directories
 directories:

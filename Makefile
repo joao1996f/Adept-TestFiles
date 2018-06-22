@@ -1,6 +1,5 @@
 # RISCV environment variable must be set
 CC=$(RISCV)/bin/riscv32-unknown-elf-gcc
-OBJCOPY=$(RISCV)/bin/riscv32-unknown-elf-objcopy
 CFLAGS=-march=rv32i -mabi=ilp32 -std=gnu11 -Wall -fno-common
 
 # Set board support package path
@@ -25,8 +24,8 @@ LINK_OBJS=$(ASM_OBJS) $(C_OBJS)
 all: directories $(ELFS)
 
 directories:
-	mkdir -p elf/simple bin/simple hex/simple
-	mkdir -p elf/intermediate bin/intermediate hex/intermediate
+	mkdir -p elf/simple
+	mkdir -p elf/intermediate
 
 $(ELFS): elf/%.elf: %.c $(LINK_OBJS) $(LINKER_SCRIPT)
 	$(CC) $(CFLAGS) $(LINK_OBJS) -o $@ $< $(LDFLAGS)

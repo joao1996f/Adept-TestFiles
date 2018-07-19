@@ -32,6 +32,9 @@ $(BINS): bin/%.bin: elf/%.elf $(ELFS)
 
 $(HEXS): hex/%.hex: bin/%.bin $(BINS)
 	od -t x4 -An -w4 -v $< > $@
+	if [ $@ = "hex/slli.hex" ]; then\
+		sed '34s/00/40/' $@ > $(subst slli,slli_trap,$@);\
+	fi
 
 clean:
 	rm -rf $(ELFS) $(BINS) $(HEXS)

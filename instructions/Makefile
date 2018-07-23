@@ -32,6 +32,9 @@ $(BINS): bin/%.bin: elf/%.elf $(ELFS)
 
 $(HEXS): hex/%.hex: bin/%.bin $(BINS)
 	od -t x4 -An -w4 -v $< > $@
+	if [ $@ = "hex/add.hex" ]; then\
+		sed '35s/00/80/' $@ > $(subst add,add_trap,$@);\
+	fi
 
 clean:
 	rm -rf $(ELFS) $(BINS) $(HEXS)

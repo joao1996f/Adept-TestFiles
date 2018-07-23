@@ -34,6 +34,8 @@ $(HEXS): hex/%.hex: bin/%.bin $(BINS)
 	od -t x4 -An -w4 -v $< > $@
 	if [ $@ = "hex/slli.hex" ]; then\
 		sed '34s/00/40/' $@ > $(subst slli,slli_trap,$@);\
+	elif [ $@ = "hex/sub.hex" ]; then\
+		sed '35s/40/80/' $@ > $(subst sub,sub_trap,$@);\
 	fi
 
 clean:

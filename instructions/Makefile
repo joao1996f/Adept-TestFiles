@@ -38,6 +38,8 @@ $(HEXS): hex/%.hex: bin/%.bin $(BINS)
 		sed '35s/40/80/' $@ > $(subst sub,sub_trap,$@);\
 	elif [ $@ = "hex/sll.hex" ]; then\
 		sed '35s/00/80/' $@ > $(subst sll,sll_trap,$@);\
+	elif [ $@ = "hex/add.hex" ]; then\
+		sed '35s/00/80/' $@ > $(subst add,add_trap,$@);\
 	fi
 
 clean:

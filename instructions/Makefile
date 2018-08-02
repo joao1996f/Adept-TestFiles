@@ -43,5 +43,6 @@ $(HEXS): hex/%.hex: bin/%.bin $(BINS)
 	elif [ $@ = "hex/sltu.hex" ]; then\
 		sed '35s/00/80/' $@ > $(subst sltu,sltu_trap,$@);\
 	fi
+	
 clean:
 	rm -rf $(ELFS) $(BINS) $(HEXS)
